@@ -46,6 +46,29 @@ private:
         printRecursive(node->right);
     }
 
+    bool findSuccessorRecursive(RoyalNode* node, RoyalNode*& bestMale, RoyalNode*& bestFemale) {
+        if (node == nullptr) return false;
+        if (!node->is_dead) {
+            if (node->gender == 'H' && node->age < 70) {
+                bestMale = node; return true; 
+            }
+            if (node->gender == 'M' && node->age > 15) {
+                if (bestFemale == nullptr || node->age < bestFemale->age) bestFemale = node;
+            }
+        }
+        if (findSuccessorRecursive(node->left, bestMale, bestFemale)) return true;
+        if (findSuccessorRecursive(node->right, bestMale, bestFemale)) return true;
+        return false;
+    }
+
+    RoyalNode* findCurrentKingRecursive(RoyalNode* node) {
+        if (!node) return nullptr;
+        if (node->is_king) return node;
+        RoyalNode* leftRes = findCurrentKingRecursive(node->left);
+        if (leftRes) return leftRes;
+        return findCurrentKingRecursive(node->right);
+    }
+
 public:
     RoyalTree() : root(nullptr) {}
     
@@ -97,6 +120,29 @@ public:
     void printSuccessionLine() {
         cout << "\n--- Linea de Sucesion (Vivos) ---" << endl;
         printRecursive(root);
+    }
+
+    void assignNewKing() {
+        RoyalNode* current = findCurrentKingRecursive(root);
+        bool needNew = false;
+        
+        if (!current) { needNew = true; cout << "Sin rey actual." << endl; }
+        else if (current->is_dead || current->age > 70) {
+            cout << "Reinado de " << current->name << " terminado." << endl;
+            current->is_king = false; current->was_king = true; needNew = true;
+        } else { cout << "El rey sigue reinando." << endl; }
+
+        if (!needNew) return;
+
+        RoyalNode* male = nullptr; RoyalNode* female = nullptr;
+        findSuccessorRecursive(root, male, female);
+        
+        RoyalNode* newKing = (male) ? male : female;
+        
+        if (newKing) {
+            newKing->is_king = true;
+            cout << ">>> NUEVO REY/REINA: " << newKing->name << " <<<" << endl;
+        } else { cout << "CRISIS: Sin herederos." << endl; }
     }
 };
 
