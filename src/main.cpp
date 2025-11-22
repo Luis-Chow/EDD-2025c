@@ -35,6 +35,17 @@ private:
         return findNodeById(current->right, id);
     }
 
+    void printRecursive(RoyalNode* node) {
+        if (node == nullptr) return;
+        if (!node->is_dead) {
+            string role = (node->is_king) ? " [REY/REINA ACTUAL]" : "";
+            cout << "- " << node->name << " " << node->last_name 
+                 << " (" << node->age << " a, " << node->gender << ")" << role << endl;
+        }
+        printRecursive(node->left);
+        printRecursive(node->right);
+    }
+
 public:
     RoyalTree() : root(nullptr) {}
     
@@ -81,6 +92,11 @@ public:
         }
         cout << "Datos cargados exitosamente." << endl;
         file.close();
+    }
+
+    void printSuccessionLine() {
+        cout << "\n--- Linea de Sucesion (Vivos) ---" << endl;
+        printRecursive(root);
     }
 };
 
