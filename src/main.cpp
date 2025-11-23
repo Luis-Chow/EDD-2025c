@@ -144,9 +144,58 @@ public:
             cout << ">>> NUEVO REY/REINA: " << newKing->name << " <<<" << endl;
         } else { cout << "CRISIS: Sin herederos." << endl; }
     }
+
+    void editNode() {
+        int id;
+        cout << "Ingrese ID del nodo a editar: ";
+        cin >> id;
+        
+        RoyalNode* node = findNodeById(root, id);
+        if (!node) {
+            cout << "ID no encontrado." << endl;
+            return;
+        }
+
+        cout << "Editando a: " << node->name << " (Deje '-' para no cambiar)" << endl;
+        
+        string input;
+        cout << "Nuevo Nombre [" << node->name << "]: ";
+        cin >> input; 
+        if (input != "-") node->name = input;
+
+        cout << "Nueva Edad [" << node->age << "]: ";
+        cin >> input;
+        if (input != "-") node->age = stoi(input);
+
+        cout << "Esta muerto? (1=Si, 0=No) [" << node->is_dead << "]: ";
+        cin >> input;
+        if (input != "-") node->is_dead = (input == "1");
+        
+        cout << "Datos actualizados." << endl;
+    }
 };
 
 int main() {
-    cout << "Sistema Royal Inicializado..." << endl;
+    RoyalTree tree;
+    string path = "bin/royal_data.csv";
+    ifstream check(path);
+    if (!check.good()) path = "royal_data.csv";
+    check.close();
+
+    tree.loadFromCsv(path);
+
+    bool running = true;
+    while (running) {
+        cout << "\n1. Ver Linea\n2. Asignar Rey\n3. Editar\n4. Salir\nOp: ";
+        int opt; 
+        if(!(cin >> opt)) { cin.clear(); cin.ignore(10000,'\n'); continue; }
+
+        switch (opt) {
+            case 1: tree.printSuccessionLine(); break;
+            case 2: tree.assignNewKing(); break;
+            case 3: tree.editNode(); break;
+            case 4: running = false; break;
+        }
+    }
     return 0;
 }

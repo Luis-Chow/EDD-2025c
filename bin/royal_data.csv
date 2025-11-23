@@ -1,0 +1,9 @@
+id,name,last_name,gender,age,id_father,is_dead,was_king,is_king
+1,Terenas,Menethil,H,71,0,0,0,1
+2,Arthas,Menethil,H,34,1,1,0,0
+3,Muradin,Bronzebeard,H,50,1,0,0,0
+4,Anduin,Wrynn,H,22,2,0,0,0
+5,Jaina,Proudmoore,M,21,2,0,0,0
+6,Magni,Bronzebeard,H,55,3,0,0,0
+7,Moira,Thaurissan,M,25,3,0,0,0
+8,Bolvar,Fordragon,H,5,4,0,0,0
